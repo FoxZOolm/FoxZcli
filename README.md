@@ -3,8 +3,7 @@
 =======<br>
 Java command line parser via annotation (very easy to use !)<br><br>
 --- annotation (target: field or method) --- <br>
-@Arg(<br>
-<ul>
+@Arg(<br><ul>
     <li>name="...","...",</li>
     <li>help="...", // optionnal</li>
     <li>ignoreCase=true/false //optionnal (but true by default)</li>
