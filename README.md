@@ -1,7 +1,4 @@
-<!DOCTYPE html>
 <html>
-  <head>
-  </head>
   <body><b>FoxZcli</b><br>
     =======<br>
     Java command line parser via annotation (very easy to use !)<br>
