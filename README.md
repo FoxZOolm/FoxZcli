@@ -1,8 +1,8 @@
 <html>
 <b>FoxZcli</b><br>
 =======<br>
-<br>Java command line parser via annotation (very easy to use !)
-<br>--- annotation (target: field or method) --- <br>
+Java command line parser via annotation (very easy to use !)<br><br>
+--- annotation (target: field or method) --- <br>
 @Arg(<br>
 .  name="...","...",<br>
   help="...", // optionnal<br>
