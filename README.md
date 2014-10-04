@@ -32,8 +32,8 @@
     <br>
     &nbsp;&nbsp;&nbsp; @Arg(name="+l", help="test list") // &lt;--- sign before
     "name" is totally free (or none, but not recommanded)<br>
-    &nbsp;&nbsp;&nbsp; private List<string>foo; // &lt;--- fill list with each
-      time +p is parsed (+p 1 +p 2 ...)<br>
+    &nbsp;&nbsp;&nbsp; private List<string>&lt;foo&gt;; // &lt;--- fill list
+      with each time +p is parsed (+p 1 +p 2 ...)<br>
       <br>
       &nbsp;&nbsp;&nbsp; @Arg(name="-callit", help="test method") <br>
       &nbsp;&nbsp;&nbsp; private MethodArgs proc(MethodArgs x){} // &lt;--- can
