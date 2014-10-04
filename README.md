@@ -3,12 +3,11 @@
 =======<br>
 Java command line parser via annotation (very easy to use !)<br><br>
 --- annotation (target: field or method) --- <br>
-@Arg(<br><ul>
+@Arg(<ul>
     <li>name="...","...",</li>
     <li>help="...", // optionnal</li>
     <li>ignoreCase=true/false //optionnal (but true by default)</li>
-</ul>
- <br>
+</ul>)<br>
 --- annotation (target: class) --- <br>
 @Opt(<br>
   trigger="<...>", // optionnal ("space" by default)<br>
