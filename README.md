@@ -4,7 +4,7 @@
 <br>Java command line parser via annotation (very easy to use !)
 <br>--- annotation (target: field or method) --- <br>
 @Arg(<br>
-<br>  name="...","...",<br>
+.  name="...","...",<br>
   help="...", // optionnal<br>
   ignoreCase=true/false //optionnal (but true by default)<br>
   <br>
