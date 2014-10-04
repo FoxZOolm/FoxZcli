@@ -11,7 +11,7 @@
     ) <br>
     <br>
     --- annotation (target: class) --- <br>
-    &nbsp;&nbsp;&nbsp; @Opt( trigger="...", // optionnal ("space" by default) <br>
+    @Opt( trigger="...", // optionnal ("space" by default) <br>
     &nbsp;&nbsp;&nbsp; ignoreCase=true/false // optionnal (but true by default)<br>
     &nbsp;)<br>
     <br>
