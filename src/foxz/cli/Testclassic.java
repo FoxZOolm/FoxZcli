@@ -1,6 +1,6 @@
 package foxz.cli;
 
-import foxz.cli.annotations.Par;
+import foxz.cli.annotations.Arg;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map.Entry;
@@ -11,16 +11,16 @@ import java.util.Map.Entry;
 
 public class Testclassic {
     
-    @Par(name="",help="1st arg") // <-- if u want optional nopar => declare last
+    @Arg(name="",help="1st arg") // <-- if u want optional nopar => declare last
     public String nopar; 
     
-    @Par(name = "-s", help="String")
+    @Arg(name = "-s", help="String")
     public String testString; //="foo" allowed (default)
     
-    @Par(name = "-b", help="Boolean")
+    @Arg(name = "-b", help="Boolean")
     public Boolean testBool=false; 
     
-    @Par(name="-m", help="Method")
+    @Arg(name="-m", help="Method")
     public MethodArgs testMethod(MethodArgs args){ // WIP !!!
         System.out.format("testMethode called with:%s\n--- snapshot at call---\n",args.getArg());
         args.consume();
@@ -28,14 +28,14 @@ public class Testclassic {
         return args; 
     }
     
-    @Par(name="-l",help="Cumulatif list")
+    @Arg(name="-l",help="Cumulatif list")
     List<String>testList; // <--- cumulation into list each time par usage //if =null ArrayList used 
     
     private void show(){
         System.out.format("NoPar:%s\nBoolean: %s\nList:%s\nString:%s\n\n", nopar,testBool,testList,testString);
     }
     
-   @Par(name="",help="2d arg (optionnal)")
+   @Arg(name="",help="2d arg (optionnal)")
     public MethodArgs testnopar(MethodArgs s){ // WIP !!!
         System.out.println("Option nopar called with");        
         while(!s.hasEnd()){ // = true if no args in buffer

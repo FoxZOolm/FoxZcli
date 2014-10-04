@@ -1,7 +1,7 @@
 package foxz.cli;
 
 import foxz.cli.annotations.Opt;
-import foxz.cli.annotations.Par;
+import foxz.cli.annotations.Arg;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map.Entry;
@@ -13,16 +13,16 @@ import java.util.Map.Entry;
 @Opt(trigger = ":") // <--- par is <name><:><values ...>
 public class TestTrigger {
     
-    @Par(name="",help="1st arg") // <-- if u want optional nopar => declare last
+    @Arg(name="",help="1st arg") // <-- if u want optional noarg => declare last
     public String nopar; 
     
-    @Par(name = "-s", help="String")
+    @Arg(name = "-s", help="String")
     public String testString; //="foo" allowed (default)
     
-    @Par(name = "-b", help="Boolean")
+    @Arg(name = "-b", help="Boolean")
     public Boolean testBool=false; 
     
-    @Par(name="-m", help="Method")
+    @Arg(name="-m", help="Method")
     public MethodArgs testMethod(MethodArgs args){ 
         String c1=args.getArg(); // get current arg
         args.consume(); // throw from args list
@@ -31,7 +31,7 @@ public class TestTrigger {
         return args; 
     }
     
-    @Par(name="-l",help="Cumulatif list")
+    @Arg(name="-l",help="Cumulatif list")
     List<String>testList; // <--- cumulation into list each time par usage //if =null ArrayList used 
     
     private void show(){

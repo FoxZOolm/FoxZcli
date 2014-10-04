@@ -2,7 +2,7 @@ package foxz.cli;
 
 import foxz.cli.annotations.DefaultOpt;
 import foxz.cli.annotations.Opt;
-import foxz.cli.annotations.Par;
+import foxz.cli.annotations.Arg;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,10 +19,10 @@ public class Cli {
     static public Map<String, String> getHelp(Object obj) {
         Map<String, String> h = new TreeMap<>();
         Field[] fs = obj.getClass().getDeclaredFields();
-        Par a;
+        Arg a;
         int bp = 1;
         for (Field f : fs) {
-            a = f.getAnnotation(Par.class);
+            a = f.getAnnotation(Arg.class);
             if (a != null) {
                 String t = a.name();
                 if (t.isEmpty()) {
@@ -33,7 +33,7 @@ public class Cli {
         }
         Method[] ms = obj.getClass().getDeclaredMethods();
         for (Method m : ms) {
-            a = m.getAnnotation(Par.class);
+            a = m.getAnnotation(Arg.class);
             if (a != null) {
                 String t = a.name();
                 if (t.isEmpty()) {
@@ -81,9 +81,9 @@ public class Cli {
         }
         Field[] fs = obj.getClass().getDeclaredFields();
         LinkedList<String> largs = prepareArgs(args, opt.trigger());
-        Par a;
+        Arg a;
         for (Field f : fs) {
-            a = f.getAnnotation(Par.class);
+            a = f.getAnnotation(Arg.class);
             if (a != null) {
                 while (largs.size() > 0) {
                     int i;
@@ -129,10 +129,10 @@ public class Cli {
         }
         Method[] ms = obj.getClass().getDeclaredMethods();
         for (Method m : ms) {
-            a = m.getAnnotation(Par.class);
+            a = m.getAnnotation(Arg.class);
             if (a != null) {
                 while (largs.size() > 0) {
-                    Par o = (Par) a;
+                    Arg o = (Arg) a;
                     int i;
                     if (a.name().isEmpty()) {
                         String p = largs.get(0);
