@@ -10,14 +10,14 @@ import java.util.Map.Entry;
 // Field up to down ordered from declaration
 // Method up to down ordered from declaration
 
-@Opt(trigger = ":") // <--- par is <name><:><values ...>
+@Opt(trigger = ":") // <--- arg is like <name><:><values ...>
 public class TestTrigger {
     
     @Arg(name="",help="1st arg") // <-- if u want optional noarg => declare last
     public String nopar; 
     
     @Arg(name = "-s", help="String")
-    public String testString; //="foo" allowed (default)
+    public String testString; //="foo" allowed
     
     @Arg(name = "-b", help="Boolean")
     public Boolean testBool=false; 
@@ -54,8 +54,9 @@ public class TestTrigger {
     }
     static public void main(String args[]) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
         TestTrigger test=new TestTrigger();  
-        args="1 -l:5 -l:6 -m totor titi tutu".split(" ");
+        args="1 -l:5 -l:6 -m:totor titi tutu".split(" ");
         test.run(args);
     }
     
 }
+
