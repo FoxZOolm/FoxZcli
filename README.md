@@ -76,7 +76,7 @@
         custom class is planned)<br>
         <br>
         <span style="font-weight: bold;">--- Licence ---</span><br>
-        CC:ByNC<br>
+        CC:ByNC:FR<br>
       </string,></string>
   </body>
 </html>
