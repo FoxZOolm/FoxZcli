@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Opt {    
-    String trigger() default "";
+    String trigger() default ""; 
     boolean globalIgnoreCase() default true;
 }
