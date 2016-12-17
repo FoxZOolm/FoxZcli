@@ -14,7 +14,7 @@ public class Testclassic {
     @Arg(name="",help="1st arg") // <-- if u want optional nopar => declare last
     public String nopar; 
     
-    @Arg(name = "-s", help="String")
+    @Arg(name = "-s", help="String", require=true)
     public String testString; //="foo" allowed (default)
     
     @Arg(name = "-b", help="Boolean")
@@ -48,14 +48,27 @@ public class Testclassic {
     }
 
     public void run(String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
-        String err=Cli.proceed(this, args);
+        Help err=Cli.proceed(this, args);
         if (err!=null){
-            System.out.format("error '%s'\n", err);
+            System.out.format("error '%s'\n", err.toString(new AbsHelp() {				
+				@Override
+				public String Help(String name, String help, String d, Boolean r) {					
+					return String.format("%s %s", name,d);
+				}
+			}));
             System.out.println("--- Help ---");
-            for (Entry h:Cli.getHelp(this).entrySet()){
-                System.out.format("%s = %s\n", h.getKey(),h.getValue());
-            }
-        } else {
+                        
+        Cli.getHelp(this).help(new AbsHelp() {			
+			@Override
+			public String Help(String name, String help, String d, Boolean r) {
+				System.out.format("%s = %s", name,help);
+				if (!d.isEmpty()) System.out.format(" default='%s'", d);
+				if(r) System.out.print(" REQUIRED");
+				System.out.println();
+				return null;
+			}
+		});
+        }else {
             System.out.println("--- show ---");
             show();
             System.out.println(".");

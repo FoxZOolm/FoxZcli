@@ -3,6 +3,8 @@ package foxz.cli;
 import foxz.cli.annotations.DefaultOpt;
 import foxz.cli.annotations.Opt;
 import foxz.cli.annotations.Arg;
+
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,35 +16,38 @@ import java.util.TreeMap;
 
 public class Cli {
 
-    public String co = "(c)SJFN@ foxz.cli [140926] by foxz chez free.fr CC:ByNc";
-
-    static public Map<String, String> getHelp(Object obj) {
-        Map<String, String> h = new TreeMap<>();
+    public String co = "(c)SJFN@ foxz.cli [161216] by foxz chez free.fr CC:ByNc";    
+    
+    static public Helps getHelp(Object obj) throws IllegalArgumentException, IllegalAccessException {
         Field[] fs = obj.getClass().getDeclaredFields();
-        Arg a;
-        int bp = 1;
-        for (Field f : fs) {
-            a = f.getAnnotation(Arg.class);
+        Helps res=new Helps();
+        int idx=0;
+        for(Field f:fs) {
+        	Arg a = f.getAnnotation(Arg.class);                   
             if (a != null) {
                 String t = a.name();
+                String d="";
                 if (t.isEmpty()) {
-                    t = "%".concat(String.valueOf(bp++));
+                    t = "%".concat(String.valueOf(idx++));                    
                 }
-                h.put(t, a.help());
-            }
+                if (f.get(obj)!=null) d=f.get(obj).toString();                
+                res.put(t,new Help(t,a.help(), a.require(), d));
+            }	
         }
+        
         Method[] ms = obj.getClass().getDeclaredMethods();
-        for (Method m : ms) {
-            a = m.getAnnotation(Arg.class);
+        for(Method m:ms) {
+        	Arg a = m.getAnnotation(Arg.class);                   
             if (a != null) {
                 String t = a.name();
+                String d="";
                 if (t.isEmpty()) {
-                    t = "%".concat(String.valueOf(bp++));
-                }
-                h.put(t, a.help());
+                    t = "%".concat(String.valueOf(idx));                    
+                }             
+                res.put(t,new Help(t,a.help(), a.require(), ""));
             }
         }
-        return h;
+        return res;
     }
 
     static protected LinkedList<String> prepareArgs(String[] args, String separator) {
@@ -74,7 +79,7 @@ public class Cli {
         return -1;
     }
 
-    static public String proceed(Object obj, String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    static public Help proceed(Object obj, String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Opt opt = obj.getClass().getAnnotation(Opt.class);
         if (opt == null) {
             opt = (new DefaultOpt()).getClass().getAnnotation(Opt.class);
@@ -82,16 +87,22 @@ public class Cli {
         Field[] fs = obj.getClass().getDeclaredFields();
         LinkedList<String> largs = prepareArgs(args, opt.trigger());
         Arg a;
-        for (Field f : fs) {
-            a = f.getAnnotation(Arg.class);
-            if (a != null) {
+        int ep=0;
+        for (Field f : fs) {        	
+            a = f.getAnnotation(Arg.class);            
+            if (a != null) {            	
+            	boolean ok=!a.require();
+            	String err=a.name();
+            	if (err.isEmpty()){
+            		err=String.format("%%%d", ep++);
+            	}
                 while (largs.size() > 0) {
                     int i;
                     if (a.name().isEmpty()) {
                         f.set(obj, largs.get(0));
                         largs.remove(0);
                         break;
-                    } else if (opt.globalIgnoreCase() && a.ignoreCase()) {
+                    } else if (opt.globalIgnoreCase() || a.ignoreCase()) {
                         i = igCaseIndexOf(largs, a.name());
                     } else {
                         i = largs.indexOf(a.name());
@@ -121,21 +132,30 @@ public class Cli {
                         } else {
                             throw new IllegalArgumentException(a.name());
                         }
-                    } else {
+                    } else {                    	
                         break;
                     }
+                }
+                if (!ok){
+                	return new Help(err,a.help(),a.require(),"Missing");
                 }
             }
         }
         Method[] ms = obj.getClass().getDeclaredMethods();
+        ep=0;
         for (Method m : ms) {
             a = m.getAnnotation(Arg.class);
             if (a != null) {
+            	boolean ok=!a.require();
+            	String err=a.name();
+            	if (err.isEmpty()){
+            		err=String.format("%%%d", ep++);
+            	}
                 while (largs.size() > 0) {
                     Arg o = (Arg) a;
                     int i;
                     if (a.name().isEmpty()) {
-                        String p = largs.get(0);
+                        String p =largs.get(0);
                         largs.remove(0);
                         boolean r = (boolean) m.invoke(obj, p);
                         break;
@@ -147,25 +167,27 @@ public class Cli {
                     }
                     if (i >= 0) {
                         largs.remove(i);
-                        String p = largs.get(i);
+                        //String p = largs.get(i);
                         largs.remove(i);
                         MethodArgs r = (MethodArgs) m.invoke(obj, new MethodArgs(largs, i, false));
                         largs = r.args;
                         if (r.stop) {
                             if (largs.size() == 0) {
                                 return null;
-                            }
-                            return largs.get(0);
+                            }                            
+                            return new Help(err,a.help(),a.require(),"TOo many :"+largs.get(0));
                         }
+                        ok=true;
                     } else {
                         break;
                     }
                 }
+                if (!ok){return new Help(err,a.help(),a.require(),"Missing");}
             }
-        }
+        }      
         if (largs.size() == 0) {
             return null;
         }
-        return largs.get(0);
+        return new Help("",largs.get(0),true,"WHAT ?");
     }
 }

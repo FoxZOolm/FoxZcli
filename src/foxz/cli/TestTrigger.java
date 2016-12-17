@@ -39,13 +39,11 @@ public class TestTrigger {
     }
       
     public void run(String[] args) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
-        String err=Cli.proceed(this, args);
+        Help err=Cli.proceed(this, args);
         if (err!=null){
             System.out.format("error '%s'\n", err);
             System.out.println("--- Help ---");
-            for (Entry h:Cli.getHelp(this).entrySet()){
-                System.out.format("%s = %s\n", h.getKey(),h.getValue());
-            }
+           
         } else {
             System.out.println("--- show ---");
             show();
